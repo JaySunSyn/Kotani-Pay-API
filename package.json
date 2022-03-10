@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "chai-as-promised": "^7.1.1",
+    "nock": "^13.2.4"
+  }
+}
