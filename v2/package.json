@@ -7,9 +7,9 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "mocha tests/modules/api_v2.spec.js --timeout 30000",
+    "test": "mocha src/**/*.spec.js --timeout 30000",
     "prepare": "cd .. && husky install .husky",
-    "test:cov": ""
+    "test:cov": "nyc mocha  src/**/*.spec.js --timeout 30000"
   },
   "engines": {
     "node": "16"
