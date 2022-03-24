@@ -1,4 +1,1 @@
-
-export const generateRandomId = () => {
-  return ''
-}
+export const generateRandomId = () => '';
