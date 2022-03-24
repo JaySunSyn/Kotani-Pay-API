@@ -8,6 +8,8 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "mocha src/**/*.spec.js --timeout 30000",
+    "lint": "eslint src/** ",
+    "lint:fix": "eslint src/** --fix",
     "prepare": "cd .. && husky install .husky",
     "test:cov": "nyc mocha  src/**/*.spec.js --timeout 30000"
   },
