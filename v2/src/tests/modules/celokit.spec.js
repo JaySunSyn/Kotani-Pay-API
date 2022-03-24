@@ -1,5 +1,5 @@
 var assert = require('chai').assert;
-var celokit =  require('../../modules/celokit');
+var celokit =  require('../../../modules/celokit');
 
 var expect = require('chai').expect;
 var should = require('chai').should();

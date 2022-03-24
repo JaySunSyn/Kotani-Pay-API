@@ -7,8 +7,9 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "test": "mocha tests/modules/api_v2.spec.js --timeout 30000",
-    "prepare": "husky install"
+    "test": "mocha src/**/*.spec.js --timeout 30000",
+    "prepare": "cd .. && husky install .husky",
+    "test:cov": "nyc mocha  src/**/*.spec.js --timeout 30000"
   },
   "engines": {
     "node": "16"
@@ -55,6 +56,7 @@
     "husky": ">=6",
     "lint-staged": ">=10",
     "mocha": "^9.2.0",
+    "nyc": "^15.1.0",
     "prettier": "^2.5.1",
     "superagent": "^6.1.0",
     "supertest": "^6.1.6"
