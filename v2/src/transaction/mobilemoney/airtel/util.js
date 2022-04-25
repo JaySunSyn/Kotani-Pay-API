@@ -41,10 +41,8 @@ export const getAirtelClient = async () => {
     throw new Error(e);
   }
 };
-
-export const generatepin = async () =>
-  // Todo: encrpyt
-  'KYJExln8rZwb14G1K5UE5YF/lD7KheNUM171MUEG3/f/QD8nmNKRsa44';
+// Todo: encrpyt
+export const generatepin = async () => 'KYJExln8rZwb14G1K5UE5YF/lD7KheNUM171MUEG3/f/QD8nmNKRsa44';
 
 export default {
   countries,

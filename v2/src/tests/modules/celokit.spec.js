@@ -1,11 +1,11 @@
 const { assert } = require('chai');
-const celokit = require('../../../modules/celokit');
 
 const { expect } = require('chai');
 const should = require('chai').should();
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const celokit = require('../../../modules/celokit');
 
 chai.use(chaiAsPromised).should();
 
