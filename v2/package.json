@@ -10,6 +10,7 @@
     "test": "mocha src/**/*.spec.js --timeout 30000",
     "lint": "eslint src/** ",
     "lint:fix": "eslint src/** --fix",
+    "format": "prettier --write .",
     "prepare": "cd .. && husky install .husky",
     "test:cov": "nyc mocha  src/**/*.spec.js --timeout 30000"
   },
@@ -36,6 +37,7 @@
     "messagebird": "^3.6.4",
     "moment": "^2.29.1",
     "mongoose": "^6.1.0",
+    "nock": "^13.2.4",
     "prettyjson": "^1.2.1",
     "qs": "^6.10.1",
     "randomstring": "^1.2.1",
@@ -59,7 +61,7 @@
     "lint-staged": ">=10",
     "mocha": "^9.2.0",
     "nyc": "^15.1.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.2",
     "superagent": "^6.1.0",
     "supertest": "^6.1.6"
   },

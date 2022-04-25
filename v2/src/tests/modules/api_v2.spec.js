@@ -68,10 +68,10 @@ describe('API_V2', () => {
             .post('/kyc/user/create')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.be.a('object');
-              res.body.should.have.property('userId').eq('938c89b541ff60171641f0a88c45c441553df5cb');
+            .end((err, result) => {
+              result.should.have.status(200);
+              result.body.should.be.a('object');
+              result.body.should.have.property('userId').eq('938c89b541ff60171641f0a88c45c441553df5cb');
               done();
             });
         });
@@ -88,10 +88,10 @@ describe('API_V2', () => {
             .post('/kyc/user/isverifiedcheck')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.be.a('object');
-              res.body.should.have.property('status').eq(false);
+            .end((err, result) => {
+              result.should.have.status(200);
+              result.body.should.be.a('object');
+              result.body.should.have.property('status').eq(false);
               done();
             });
         });
@@ -108,10 +108,10 @@ describe('API_V2', () => {
             .post('/user/account/generateAddress')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
-            .end((err, res) => {
-              res.should.have.status(200);
-              res.body.should.be.a('object');
-              res.body.should.have.property('status'); // .eq(true)
+            .end((err, result) => {
+              result.should.have.status(200);
+              result.body.should.be.a('object');
+              result.body.should.have.property('status'); // .eq(true)
               done();
             });
         });
@@ -123,7 +123,7 @@ describe('API_V2', () => {
       const userDetails = { phoneNumber: '+254720123456' };
 
       chai.request(baseUrl).post('/api/login').send(adminCredentials)
-        .then((res) => {
+        .then((result) => {
           chai.request(baseUrl)
             .post('/user/account/getBalance')
             .set('Authorization', `Bearer ${res.body.accessToken}`)

@@ -44,7 +44,7 @@ const getSignature = async () => {
   return signature_b64;
 };
 
-const generateReferenceCode = () => {
+exports.generateReferenceCode = () => {
   return new Promise(resolve => {
     resolve (randomstring.generate({ length: 12, charset: 'numeric' }));
   });

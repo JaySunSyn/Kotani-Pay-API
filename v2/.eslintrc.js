@@ -11,5 +11,13 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'no-console': 0,
+    'no-undef': 0,
+    camelcase: 0,
+    'no-await-in-loop': 1,
+    'consistent-return': 0,
+    'no-underscore-dangle': 0,
+    'no-unused-vars': 0,
+    'max-len': 0,
   },
 };

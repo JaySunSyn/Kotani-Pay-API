@@ -5,10 +5,10 @@ const {
 } = require('../../../../modules/libraries');
 const lib = require('../../../../modules/libraries');
 const { getTxidUrl, isValidPhoneNumber, validateMSISDN } = require('../../../../modules/utilities');
+const { sendcUSD, getContractKit } = require('../../../../modules/celokit');
 
 const kit = getContractKit();
 const { GHS_TO_USD, iv } = require('../../../contants');
-const { sendcUSD, getContractKit } = require('./modules/celokit');
 
 // @params: { "depositPhoneNumber" : "String", "depositAmount" : { "currency" : "String", "amount" : "String" } }
 // 👍🏽
@@ -20,7 +20,7 @@ export const transactionDepositMomo = async (req, res) => {
     let depositorMSISDN = req.body.phoneNumber;
     const depositCurrency = req.body.currency;
     const { amount } = req.body;
-    const _depositorIsValidZMPhoneNumber = await isValidGhPhoneNumber(depositorMSISDN);
+    const _depositorIsValidZMPhoneNumber = isValidPhoneNumber(depositorMSISDN);
     console.log(depositorMSISDN, 'Depositor isValidGhPhoneNumber ', _depositorIsValidZMPhoneNumber);
 
     if (_depositorIsValidZMPhoneNumber) {
@@ -39,7 +39,7 @@ export const transactionDepositMomo = async (req, res) => {
       const escrowId = await getUserId(escrowMSISDN);
       let depositorInfo = await lib.getUserDetails(depositorId);
       while (depositorInfo.data() === undefined || depositorInfo.data() === null || depositorInfo.data() === '') {
-        await sleep(1000);
+        sleep(1000);
         depositorInfo = await lib.getUserDetails(depositorId);
         // console.log('Receiver:', receiverInfo.data());
       }
@@ -87,11 +87,11 @@ export const transactionWithdrawMomo = async (req, res) => {
     const { fiatTxnReferenceId } = req.body;
 
     const { permissionLevel } = req.user;
-    if (permissionLevel != 'partner') { return res.status(401).send({ status: 'Unauthorized' }); }
+    if (permissionLevel !== 'partner') { return res.status(401).send({ status: 'Unauthorized' }); }
 
     const targetCountry = getTargetCountry(permissionLevel, req.user.targetCountry);
     let escrowMSISDN;
-    if (targetCountry == 'GH') { escrowMSISDN = functions.config().env.escrow.bezomoney.msisdn; } else { escrowMSISDN = functions.config().env.escrow.equitel; }
+    if (targetCountry === 'GH') { escrowMSISDN = functions.config().env.escrow.bezomoney.msisdn; } else { escrowMSISDN = functions.config().env.escrow.equitel; }
 
     const withdrawMSISDN = await validateMSISDN(phoneNumber, targetCountry);
     const _isValidPhoneNumber = await isValidPhoneNumber(withdrawMSISDN, targetCountry);
@@ -110,7 +110,7 @@ export const transactionWithdrawMomo = async (req, res) => {
     console.log('withdrawerId: ', withdrawerId);
 
     const userData = await admin.auth().getUser(withdrawerId);
-    console.log('Withdrawer fullName: ', user.displayName);
+    console.log('Withdrawer fullName: ', userData.displayName);
 
     // Retrieve User Blockchain Data
     const escrowInfo = await lib.getReceiverDetails(escrowId);
@@ -137,6 +137,6 @@ export const transactionWithdrawMomo = async (req, res) => {
       withdrawReference: `${fiatTxnReferenceId}`,
     });
 
-    console.log(parseInt(cusdAmount * ghs_to_usd));
+    console.log(parseInt(cusdAmount * ghs_to_usd, 10));
   } catch (e) { console.log('Error: ', e); res.json({ status: 400, desc: 'Invalid request' }); }
 };
