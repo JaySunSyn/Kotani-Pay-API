@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 
 // Firebase init
 const functions = require('firebase-functions');

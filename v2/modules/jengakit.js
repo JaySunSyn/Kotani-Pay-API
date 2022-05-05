@@ -5,12 +5,18 @@ const crypto = require('crypto');
 const fs = require('fs');
 var randomstring = require('randomstring');
 
-const jenga_username = functions.config().env.jenga.username;
-const jenga_password = functions.config().env.jenga.password;
-const jenga_api_key = functions.config().env.jenga.api_key;
-const merchant_code = functions.config().env.jenga.merchant_code;
-const account_id = functions.config().env.jenga.account_id;
-const jenga_api_url = functions.config().env.jenga.api_url;
+
+
+const {
+  jenga_username,
+  jenga_password,
+  jenga_api_key,
+  merchant_code,
+  account_id,
+  jenga_api_url
+} = require('../src/contants/index')
+
+
 const country_code = 'KE';
 
 const getAccessToken = async () => {

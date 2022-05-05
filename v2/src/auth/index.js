@@ -26,18 +26,32 @@ const kit = getContractKit();
 
 // 👍🏽
 const login = async (req, res) => {
+  const { phoneNumber, countryCode } = req.body;
+  if (!phoneNumber || !countryCode) {
+    res.status(422).send({ error: true, message: 'Missing Phone or Country!' });
+  }
+
   const userMSISDN = await validateMSISDN(
-    req.body.phoneNumber,
-    req.body.countryCode
+    phoneNumber,
+    countryCode
   );
-  //console.log('MSISDN:', userMSISDN);
+  console.log({ userMSISDN });
+  if (!userMSISDN) {
+    throw new Error('MSISDN Error!');
+  }
+
+  // console.log('MSISDN:', userMSISDN);
   const userId = await lib.getUserId(userMSISDN);
+  console.log({ userId });
+  if (!userId) {
+    throw new Error('User ID Error!');
+  }
 
   const userInfo = await lib.getKotaniPartnerDetails(userId);
   if (
-    userInfo.data() === undefined ||
-    userInfo.data() === null ||
-    userInfo.data() === ''
+    userInfo.data() === undefined
+    || userInfo.data() === null
+    || userInfo.data() === ''
   ) {
     return res.status(400).send('Cannot find user');
   }
@@ -49,7 +63,7 @@ const login = async (req, res) => {
       return res.json({ status: 400, desc: 'Not Allowed' });
     }
   } catch (e) {
-    //console.log(e);
+    // console.log(e);
     res.status(500).send();
   }
 };
@@ -57,12 +71,12 @@ const login = async (req, res) => {
 // 👍🏽
 const resetPin = async (req, res) => {
   try {
-    //console.log(`Received request for: ${req.url}`);
+    // console.log(`Received request for: ${req.url}`);
     const { phoneNumber } = req.body;
     const { newUserPin } = req.body;
     const { permissionLevel } = req.user;
     const userNumber = req.user.phoneNumber;
-    //console.log('UserNumber: ', userNumber, 'permission: ', permissionLevel);
+    // console.log('UserNumber: ', userNumber, 'permission: ', permissionLevel);
 
     if (permissionLevel !== 'support' && permissionLevel !== 'admin') {
       return res.status(401).send({ status: 'Unauthorized' });
@@ -75,7 +89,7 @@ const resetPin = async (req, res) => {
       phoneNumber,
       targetCountry
     );
-    //console.log('isValidPhoneNumber ', _isValidPhoneNumber);
+    // console.log('isValidPhoneNumber ', _isValidPhoneNumber);
 
     if (!_isValidPhoneNumber) {
       return res.json({ status: 400, desc: 'Invalid PhoneNumber' });
@@ -87,7 +101,7 @@ const resetPin = async (req, res) => {
       const userId = await getUserId(userMSISDN);
       const userstatusresult = await checkIfSenderExists(userId);
       if (!userstatusresult) {
-        //console.log('User does not exist: ');
+        // console.log('User does not exist: ');
         return res.json({ status: 400, desc: 'User does not exist' });
       }
 
@@ -101,7 +115,7 @@ const resetPin = async (req, res) => {
           desc: 'PIN must be atleast 4 characters',
         });
       }
-      //console.log('newUserPin', newUserPin);
+      // console.log('newUserPin', newUserPin);
       const enc_loginpin = await createcypher(newUserPin, userMSISDN, iv);
       await firestore
         .collection('hashfiles')
@@ -116,7 +130,7 @@ const resetPin = async (req, res) => {
       });
     }
   } catch (e) {
-    //console.log(JSON.stringify(e));
+    // console.log(JSON.stringify(e));
     res.json({ status: 400, desc: 'invalid information provided' });
   }
 };
@@ -124,7 +138,7 @@ const resetPin = async (req, res) => {
 // 👍🏽
 // parameter: {"phoneNumber" : "E.164 number" }
 const getBalance = async (req, res) => {
-  //console.log(`Received request for: ${req.url}`);
+  // console.log(`Received request for: ${req.url}`);
   try {
     const { localCurrency } = req.user;
     const { permissionLevel } = req.user;
@@ -156,18 +170,18 @@ const getBalance = async (req, res) => {
 
     const userId = await getUserId(userMSISDN);
     const userstatusresult = await checkIfSenderExists(userId);
-    //console.log('User Exists? ', userstatusresult);
+    // console.log('User Exists? ', userstatusresult);
     if (!userstatusresult) {
       return res.json({ status: 400, desc: 'user does not exist' });
     }
     const userInfo = await getUserDetails(userId);
-    //console.log('User Address => ', userInfo.data().publicAddress);
+    // console.log('User Address => ', userInfo.data().publicAddress);
 
     const cusdtoken = await kit.contracts.getStableToken();
     const cusdBalance = await cusdtoken.balanceOf(
       userInfo.data().publicAddress
     ); // In cUSD
-    //console.log(`CUSD Balance Before: ${cusdBalance}`);
+    // console.log(`CUSD Balance Before: ${cusdBalance}`);
     console.info(`Account balance of ${await weiToDecimal(cusdBalance)} CUSD`);
     const localCurrencyAmount = await getLocalCurrencyAmount(
       cusdBalance,
@@ -182,16 +196,13 @@ const getBalance = async (req, res) => {
       },
     });
   } catch (e) {
-    //console.log(e); res.json({ status: 400, desc: 'invalid request' }); }
+    // console.log(e); res.json({ status: 400, desc: 'invalid request' }); }
   }
-
- 
 };
 
-
- // 👍🏽
- const userAccountDetails = async (req, res) => {
-  //console.log(`Received request for: ${req.url}`);
+// 👍🏽
+const userAccountDetails = async (req, res) => {
+  // console.log(`Received request for: ${req.url}`);
   try {
     const { permissionLevel } = req.user;
     const targetCountry = getTargetCountry(
@@ -199,9 +210,9 @@ const getBalance = async (req, res) => {
       req.user.targetCountry
     );
     if (
-      permissionLevel !== 'partner' &&
-      permissionLevel !== 'admin' &&
-      permissionLevel !== 'support'
+      permissionLevel !== 'partner'
+      && permissionLevel !== 'admin'
+      && permissionLevel !== 'support'
     ) {
       return res.json({ status: 400, desc: 'Unauthorized request' });
     }
@@ -214,7 +225,7 @@ const getBalance = async (req, res) => {
       userMSISDN,
       targetCountry
     );
-    //console.log(`isValid ${targetCountry} PhoneNumber `, _isValidPhoneNumber);
+    // console.log(`isValid ${targetCountry} PhoneNumber `, _isValidPhoneNumber);
 
     if (!_isValidPhoneNumber) {
       return res.json({
@@ -225,10 +236,10 @@ const getBalance = async (req, res) => {
     }
 
     const userId = await getUserId(userMSISDN);
-    //console.log('UserId: ', userId);
+    // console.log('UserId: ', userId);
 
     const userstatusresult = await checkIfSenderExists(userId);
-    //console.log('User Exists? ', userstatusresult);
+    // console.log('User Exists? ', userstatusresult);
     if (!userstatusresult) {
       return res.json({ status: 400, desc: 'user does not exist' });
     }
@@ -236,11 +247,10 @@ const getBalance = async (req, res) => {
     const userInfo = await getUserDetails(userId);
     res.json({ status: 201, address: `${userInfo.data().publicAddress}` });
   } catch (e) {
-    //console.log(e);
+    // console.log(e);
     res.json({ status: 400, desc: 'invalid request' });
   }
 };
-
 
 module.exports = {
   getBalance,

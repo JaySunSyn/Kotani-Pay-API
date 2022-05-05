@@ -27,14 +27,14 @@ api_v2.post('/', async (req, res) => {
 
 // auth & user endpoints
 api_v2.post('/api/login', login);
-api_v2.post('/user/resetPin', authenticateToken, resetPin);
-api_v2.post('/user/account/getBalance', authenticateToken, getBalance);
-api_v2.post('/user/account/details', authenticateToken, userAccountDetails);
+// api_v2.post('/user/resetPin', authenticateToken, resetPin);
+// api_v2.post('/user/account/getBalance', authenticateToken, getBalance);
+// api_v2.post('/user/account/details', authenticateToken, userAccountDetails);
 
 // kyc
-api_v2.post('/kyc/user/update', authenticateToken, kycUserUpdate);
-api_v2.post('/kyc/user/activate', authenticateToken, kycUserActivate);
-api_v2.post('/kyc/user/create', authenticateToken, kycUserCreate);
+// api_v2.post('/kyc/user/update', authenticateToken, kycUserUpdate);
+// api_v2.post('/kyc/user/activate', authenticateToken, kycUserActivate);
+api_v2.post('/kyc/user/create', kycUserCreate);
 api_v2.post(
   '/kyc/user/isverifiedcheck',
   authenticateToken,
@@ -46,12 +46,13 @@ api_v2.post(
   kycUserGetDetailsByPhone
 );
 api_v2.post('/kyc/user/setDetails', authenticateToken, kycUserSetDetails);
-api_v2.post(
-  '/programs/kyc/updateUser',
-  authenticateToken,
-  programsKycUpdateUser
-);
+// api_v2.post(
+//  '/programs/kyc/updateUser',
+//  authenticateToken,
+//  programsKycUpdateUser
+// );
 
+/*
 // mpesa
 api_v2.post(
   '/transactions/withdraw/sendToMpesa',
@@ -63,15 +64,6 @@ api_v2.post(
   authenticateToken,
   transactionWithdrawGetMpesaStatus
 );
-
-// transfer
-api_v2.post(
-  '/api/webhook/withdrawResponse',
-  authenticateToken,
-  apiWebhookWithdrawResponse
-);
-
-/*
 //celo
 //api_v2.post('/dex/buyCelo', authenticateToken, dexBuyCelo);
 
@@ -102,6 +94,13 @@ api_v2.post(
   '/transactions/withdraw/momo',
   authenticateToken,
   transactionWithdrawMomo
+);
+
+// transfer
+api_v2.post(
+  '/api/webhook/withdrawResponse',
+  authenticateToken,
+  apiWebhookWithdrawResponse
 );
 
 api_v2.post(
