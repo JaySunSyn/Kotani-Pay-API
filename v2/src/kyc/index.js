@@ -382,4 +382,8 @@ module.exports = {
   kycUserActivate,
   kycUserCreate,
   kycUserUpdate,
+  kycUserGetDetailsByPhone ,
+  kycUserIsVerifiedCheck, 
+  kycUserSetDetails,
+  programsKycUpdateUser
 }

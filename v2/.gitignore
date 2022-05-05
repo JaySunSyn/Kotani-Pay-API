@@ -98,4 +98,4 @@ serviceAccountKey.json
 .pnp.*
 
 .firebaserc
-firebase.json
+ firebase.json

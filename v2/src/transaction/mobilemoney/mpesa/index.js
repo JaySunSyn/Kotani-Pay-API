@@ -27,7 +27,7 @@ const { USD_TO_KES, escrowMSISDN } = require('../../../contants');
 
 // 👍🏽
 // parameters: {"phoneNumber" : "E.164 number" , "amount" : "value", "txhash" : "value"}
-export const transactionWithdrawMpesaSend = async (req, res) => {
+const transactionWithdrawMpesaSend = async (req, res) => {
   console.log(`Received request for: ${req.url}`);
   try {
     const { phoneNumber } = req.body;
@@ -161,7 +161,7 @@ export const transactionWithdrawMpesaSend = async (req, res) => {
 // 👍🏽
 
 // eslint-disable-next-line consistent-return
-export const transactionWithdrawGetMpesaStatus = async (req, res) => {
+const transactionWithdrawGetMpesaStatus = async (req, res) => {
   try {
     const { permissionLevel } = req.user;
     const targetCountry = getTargetCountry(
@@ -186,4 +186,9 @@ export const transactionWithdrawGetMpesaStatus = async (req, res) => {
   } catch (e) {
     res.json({ status: 400, user: 'Invalid request' });
   }
+};
+
+module.exports = {
+  transactionWithdrawGetMpesaStatus,
+  transactionWithdrawMpesaSend
 };

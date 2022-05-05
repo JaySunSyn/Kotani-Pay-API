@@ -3,12 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const bearerToken = require('express-bearer-token');
 const bcrypt = require('bcryptjs');
+
 const api_v2 = express().use(cors({ origin: true }), bearerToken());
-const {  authenticateToken} = require('./modules/libraries')
-const { login ,resetPin , getBalance , userAccountDetails  } = require('./src/auth/index');
-const { kycUserUpdate , kycUserActivate, kycUserCreate } = require('./src/kyc/index');
-
-
+const { authenticateToken } = require('./modules/libraries');
+const {
+  login, resetPin, getBalance, userAccountDetails
+} = require('./src/auth/index');
+const {
+  kycUserUpdate, kycUserActivate, kycUserCreate, kycUserGetDetailsByPhone, kycUserIsVerifiedCheck, kycUserSetDetails, programsKycUpdateUser
+} = require('./src/kyc/index');
+const { transactionWithdrawMpesaSend, transactionWithdrawGetMpesaStatus } = require('./src/transaction/mobilemoney/mpesa/index');
 
 require('dotenv').config();
 // KOTANI RESTFUL API
@@ -21,13 +25,13 @@ api_v2.post('/', async (req, res) => {
   res.status(200).send('OK');
 });
 
-//auth & user endpoints
+// auth & user endpoints
 api_v2.post('/api/login', login);
 api_v2.post('/user/resetPin', authenticateToken, resetPin);
 api_v2.post('/user/account/getBalance', authenticateToken, getBalance);
 api_v2.post('/user/account/details', authenticateToken, userAccountDetails);
 
-//kyc
+// kyc
 api_v2.post('/kyc/user/update', authenticateToken, kycUserUpdate);
 api_v2.post('/kyc/user/activate', authenticateToken, kycUserActivate);
 api_v2.post('/kyc/user/create', authenticateToken, kycUserCreate);
@@ -48,8 +52,28 @@ api_v2.post(
   programsKycUpdateUser
 );
 
+// mpesa
+api_v2.post(
+  '/transactions/withdraw/sendToMpesa',
+  authenticateToken,
+  transactionWithdrawMpesaSend
+);
+api_v2.post(
+  '/transactions/withdraw/getMpesaStatus',
+  authenticateToken,
+  transactionWithdrawGetMpesaStatus
+);
+
+// transfer
+api_v2.post(
+  '/api/webhook/withdrawResponse',
+  authenticateToken,
+  apiWebhookWithdrawResponse
+);
+
+/*
 //celo
-api_v2.post('/dex/buyCelo', authenticateToken, dexBuyCelo);
+//api_v2.post('/dex/buyCelo', authenticateToken, dexBuyCelo);
 
 //ubi
 api_v2.post(
@@ -80,24 +104,6 @@ api_v2.post(
   transactionWithdrawMomo
 );
 
-//mpesa
-api_v2.post(
-  '/transactions/withdraw/sendToMpesa',
-  authenticateToken,
-  transactionWithdrawMpesaSend
-);
-api_v2.post(
-  '/transactions/withdraw/getMpesaStatus',
-  authenticateToken,
-  transactionWithdrawGetMpesaStatus
-);
-
-//transfer
-api_v2.post(
-  '/api/webhook/withdrawResponse',
-  authenticateToken,
-  apiWebhookWithdrawResponse
-);
 api_v2.post(
   '/transactions/getEscrow',
   authenticateToken,
@@ -109,4 +115,5 @@ api_v2.post(
   transactionsTransferP2p
 );
 
+*/
 module.exports = functions.https.onRequest(api_v2);
