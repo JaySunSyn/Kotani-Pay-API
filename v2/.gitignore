@@ -65,7 +65,8 @@ web_modules/
 
 # Optional REPL history
 .node_repl_history
-
+/config
+serviceAccountKey.json
 # Output of 'npm pack'
 *.tgz
 
@@ -96,3 +97,5 @@ web_modules/
 .yarn/install-state.gz
 .pnp.*
 
+.firebaserc
+firebase.json
