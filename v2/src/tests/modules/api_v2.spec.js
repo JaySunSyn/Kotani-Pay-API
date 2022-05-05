@@ -32,7 +32,8 @@ describe('API_V2', () => {
         phoneNumber: '+254721234567',
         localCurrency: 'kes',
       };
-      chai.request(baseUrl)
+      chai
+        .request(baseUrl)
         .post('/auth/signup')
         .send(credentials)
         .end((err, res) => {
@@ -46,7 +47,8 @@ describe('API_V2', () => {
 
   describe('POST /api/login', () => {
     it('It should return an accessToken', (done) => {
-      chai.request(baseUrl)
+      chai
+        .request(baseUrl)
         .post('/api/login')
         .send(adminCredentials)
         .end((err, res) => {
@@ -62,16 +64,22 @@ describe('API_V2', () => {
     it('It should return an ok if create user is successful', (done) => {
       const userDetails = { phoneNumber: '+254722123456' };
 
-      chai.request(baseUrl).post('/api/login').send(adminCredentials)
+      chai
+        .request(baseUrl)
+        .post('/api/login')
+        .send(adminCredentials)
         .then((res) => {
-          chai.request(baseUrl)
+          chai
+            .request(baseUrl)
             .post('/kyc/user/create')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
             .end((err, result) => {
               result.should.have.status(200);
               result.body.should.be.a('object');
-              result.body.should.have.property('userId').eq('938c89b541ff60171641f0a88c45c441553df5cb');
+              result.body.should.have
+                .property('userId')
+                .eq('938c89b541ff60171641f0a88c45c441553df5cb');
               done();
             });
         });
@@ -82,9 +90,13 @@ describe('API_V2', () => {
     it('It should return false if the user is not verified', (done) => {
       const userDetails = { phoneNumber: '+254720123456' };
 
-      chai.request(baseUrl).post('/api/login').send(adminCredentials)
+      chai
+        .request(baseUrl)
+        .post('/api/login')
+        .send(adminCredentials)
         .then((res) => {
-          chai.request(baseUrl)
+          chai
+            .request(baseUrl)
             .post('/kyc/user/isverifiedcheck')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
@@ -102,9 +114,13 @@ describe('API_V2', () => {
     it('It should return false if the user is not verified', (done) => {
       const userDetails = { phoneNumber: '+254720123456' };
 
-      chai.request(baseUrl).post('/api/login').send(adminCredentials)
+      chai
+        .request(baseUrl)
+        .post('/api/login')
+        .send(adminCredentials)
         .then((res) => {
-          chai.request(baseUrl)
+          chai
+            .request(baseUrl)
             .post('/user/account/generateAddress')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)
@@ -122,9 +138,13 @@ describe('API_V2', () => {
     it('It should return the user balance in local currency', (done) => {
       const userDetails = { phoneNumber: '+254720123456' };
 
-      chai.request(baseUrl).post('/api/login').send(adminCredentials)
+      chai
+        .request(baseUrl)
+        .post('/api/login')
+        .send(adminCredentials)
         .then((result) => {
-          chai.request(baseUrl)
+          chai
+            .request(baseUrl)
             .post('/user/account/getBalance')
             .set('Authorization', `Bearer ${res.body.accessToken}`)
             .send(userDetails)

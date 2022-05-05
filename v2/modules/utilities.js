@@ -3,42 +3,44 @@ const functions = require('firebase-functions');
 const moment = require('moment');
 
 const PNF = require('google-libphonenumber').PhoneNumberFormat;
-const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+const phoneUtil =
+  require('google-libphonenumber').PhoneNumberUtil.getInstance();
 const randomstring = require('randomstring');
 const request = require('request');
+const crypto = require('crypto');
+const send = require('gmail-send')(gmailSendOptions);
 
 // SEND GET shortURL
-exports.getTxidUrl = async (txid) => await getSentTxidUrl(txid);
-
 function getSentTxidUrl(txid) {
   return new Promise((resolve) => {
     const sourceURL = `https://explorer.celo.org/tx/${txid}/token-transfers`;
     resolve(tinyURL.shorten(sourceURL));
   });
 }
+exports.getTxidUrl = (txid) => getSentTxidUrl(txid);
 
-exports.getDeepLinkUrl = (deeplink) => new Promise((resolve) => {
-  const sourceURL = deeplink;
-  resolve(tinyURL.shorten(sourceURL));
-});
+exports.getDeepLinkUrl = (deeplink) =>
+  new Promise((resolve) => {
+    const sourceURL = deeplink;
+    resolve(tinyURL.shorten(sourceURL));
+  });
 
 // GET ACCOUNT ADDRESS shortURL
-exports.getAddressUrl = async (userAddress) => await getUserAddressUrl(userAddress);
-
 function getUserAddressUrl(userAddress) {
   return new Promise((resolve) => {
     const sourceURL = `https://explorer.celo.org/address/${userAddress}/tokens`;
     resolve(tinyURL.shorten(sourceURL));
   });
 }
+exports.getAddressUrl = (userAddress) => getUserAddressUrl(userAddress);
 
-exports.getPinFromUser = () => new Promise((resolve) => {
-  const loginpin = randomstring.generate({ length: 4, charset: 'numeric' });
-  resolve(loginpin);
-});
+exports.getPinFromUser = () =>
+  new Promise((resolve) => {
+    const loginpin = randomstring.generate({ length: 4, charset: 'numeric' });
+    resolve(loginpin);
+  });
 
 const getEncryptKey = (userMSISDN) => {
-  const crypto = require('crypto');
   const hash_fn = functions.config().env.algo.key_hash;
   const key = crypto.createHash(hash_fn).update(userMSISDN).digest('hex');
   return key;
@@ -46,7 +48,6 @@ const getEncryptKey = (userMSISDN) => {
 exports.getEncryptKey = getEncryptKey;
 
 exports.createcypher = async (text, userMSISDN, iv) => {
-  const crypto = require('crypto');
   const key = await getEncryptKey(userMSISDN);
   const cipher = crypto.createCipher('aes192', key, iv);
   let encrypted = cipher.update(text, 'utf8', 'hex');
@@ -55,7 +56,6 @@ exports.createcypher = async (text, userMSISDN, iv) => {
 };
 
 exports.decryptcypher = async (encrypted, userMSISDN, iv) => {
-  const crypto = require('crypto');
   const key = await getEncryptKey(userMSISDN);
   const decipher = crypto.createDecipher('aes192', key, iv);
   let decrypted = decipher.update(encrypted, 'hex', 'utf8');
@@ -87,7 +87,9 @@ exports.sendMessage = async (recipients, message) => {
       console.log(response.body);
       return response.body;
     });
-  } catch (e) { console.log(JSON.stringify(e)); }
+  } catch (e) {
+    console.log(JSON.stringify(e));
+  }
 };
 
 exports.sendGmail = async (userEmail, message) => {
@@ -98,11 +100,13 @@ exports.sendGmail = async (userEmail, message) => {
     subject: 'KotaniPay PIN',
   };
   // SEND GMAIL
-  const send = require('gmail-send')(gmailSendOptions);
+
   try {
     const res = await send({ text: message });
     console.log('Gmail Sent res.result: ', res.result);
-  } catch (e) { console.error('Error:', e); }
+  } catch (e) {
+    console.error('Error:', e);
+  }
 };
 
 exports.arraytojson = (item, index, arr) => {
@@ -114,7 +118,9 @@ exports.stringToObj = (string) => {
   const stringArray = string.split('&');
   for (let i = 0; i < stringArray.length; i++) {
     const kvp = stringArray[i].split('=');
-    if (kvp[1]) { obj[kvp[0]] = kvp[1]; }
+    if (kvp[1]) {
+      obj[kvp[0]] = kvp[1];
+    }
   }
   return obj;
 };
@@ -134,10 +140,21 @@ exports.parseMsisdn = (userMSISDN) => {
 };
 
 exports.validateMSISDN = async (phoneNumber, countryISOCode) => {
-  const isValidPhoneNo = phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(phoneNumber, countryISOCode));
-  if (!isValidPhoneNo) { return 'invalid'; }
+  const isValidPhoneNo = phoneUtil.isValidNumber(
+    phoneUtil.parseAndKeepRawInput(phoneNumber, countryISOCode)
+  );
+  if (!isValidPhoneNo) {
+    return 'invalid';
+  }
   let userMSISDN;
-  try { userMSISDN = phoneUtil.format(phoneUtil.parseAndKeepRawInput(phoneNumber, countryISOCode), PNF.E164); } catch (e) { console.log(e); }
+  try {
+    userMSISDN = phoneUtil.format(
+      phoneUtil.parseAndKeepRawInput(phoneNumber, countryISOCode),
+      PNF.E164
+    );
+  } catch (e) {
+    console.log(e);
+  }
   return userMSISDN.substring(1);
 };
 
