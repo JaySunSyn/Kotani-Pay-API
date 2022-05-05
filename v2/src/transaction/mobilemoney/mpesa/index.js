@@ -1,16 +1,16 @@
-const {
-  getUserId, getUserDetails, getTargetCountry, number_format, processApiWithdraw, setProcessedTransaction, getExchangeRate,
-} = require('../../../../modules/libraries');
 const express = require('express');
 const cors = require('cors');
 const bearerToken = require('express-bearer-token');
+const moment = require('moment');
 
 const api_v2 = express().use(cors({ origin: true }), bearerToken());
-const moment = require('moment');
-const lib = require('./modules/libraries');
-const { isValidPhoneNumber, validateMSISDN } = require('./modules/utilities');
-const { getLatestBlock, validateWithdrawHash } = require('./modules/celokit');
-const jenga = require('./modules/jengakit');
+const {
+  getUserId, getUserDetails, getTargetCountry, number_format, processApiWithdraw, setProcessedTransaction, getExchangeRate,
+} = require('../../../../modules/libraries');
+const lib = require('../../../../modules/libraries');
+const { isValidPhoneNumber, validateMSISDN } = require('../../../../modules/utilities');
+const { getLatestBlock, validateWithdrawHash } = require('../../../../modules/celokit');
+const jenga = require('../../../../modules/jengakit');
 const { USD_TO_KES, escrowMSISDN } = require('../../../contants');
 
 // 👍🏽
@@ -29,7 +29,7 @@ export const transactionWithdrawMpesaSend = async (req, res) => {
     if (!_isValidPhoneNumber) { return res.json({ status: 400, desc: `${userMSISDN} is not a valid KE phoneNumber` }); }
     const userId = await getUserId(userMSISDN);
 
-    if (txhash == null || txhash == '') { return res.json({ status: 400, desc: 'Invalid Hash', comment: 'Transaction hash cannot be empty' }); }
+    if (txhash == null || txhash === '') { return res.json({ status: 400, desc: 'Invalid Hash', comment: 'Transaction hash cannot be empty' }); }
     const txreceipt = await lib.validateCeloTransaction(txhash);
     if (txreceipt == null) { return res.json({ status: 400, desc: 'Invalid Transaction Receipt', comment: 'Only transactions to the Escrow address can be processed' }); }
 
@@ -37,13 +37,13 @@ export const transactionWithdrawMpesaSend = async (req, res) => {
     const escrowInfo = await getUserDetails(escrowId);
     const escrowAddress = escrowInfo.data().publicAddress;
     const txdetails = await validateWithdrawHash(txhash, escrowAddress);
-    if (txdetails.status != 'ok') { return res.json({ status: 400, desc: 'Invalid Hash', comment: `${txdetails.status}` }); }
+    if (txdetails.status !== 'ok') { return res.json({ status: 400, desc: 'Invalid Hash', comment: `${txdetails.status}` }); }
     const validblocks = txdetails.txblock;
-    let _validblocks = parseInt(validblocks);
+    let _validblocks = parseInt(validblocks, 10);
     _validblocks += 1440;
     const latestblock = await getLatestBlock();
-    const _latestblock = parseInt(latestblock.number);
-    if (txreceipt.status != true || _validblocks < _latestblock) {
+    const _latestblock = parseInt(latestblock.number, 10);
+    if (txreceipt.status !== true || _validblocks < _latestblock) {
       return res.json({
         status: 400, desc: 'Invalid Transaction', blockNumber: txdetails.txblock, latestBlock: _latestblock,
       });
@@ -99,11 +99,12 @@ export const transactionWithdrawMpesaSend = async (req, res) => {
 // parameters: {celloAddress, phoneNumber, amount}
 // 👍🏽
 
+// eslint-disable-next-line consistent-return
 export const transactionWithdrawGetMpesaStatus = async (req, res) => {
   try {
     const { permissionLevel } = req.user;
     const targetCountry = getTargetCountry(permissionLevel, req.user.targetCountry);
-    if (targetCountry != 'KE') { return res.json({ status: 400, desc: 'Invalid request' }); }
+    if (targetCountry !== 'KE') { return res.json({ status: 400, desc: 'Invalid request' }); }
 
     const { requestId } = req.body;
     const { requestDate } = req.body;
@@ -111,6 +112,6 @@ export const transactionWithdrawGetMpesaStatus = async (req, res) => {
     const _mpesaref = status.mpesaref;
 
     if (_mpesaref.length > 2) { return res.json(status); }
-    if (_mpesaref.length == 0) { return res.json({ status: 400, desc: 'Mpesa Transaction not found' }); }
+    if (_mpesaref.length === 0) { return res.json({ status: 400, desc: 'Mpesa Transaction not found' }); }
   } catch (e) { res.json({ status: 400, user: 'Invalid request' }); }
 };

@@ -1,19 +1,19 @@
 const {
   getUserId, getUserDetails, getTargetCountry, checkIfSenderExists,
-} = require('./modules/libraries');
-const lib = require('./modules/libraries');
-const { authenticateToken } = require('./modules');
+} = require('../../../../modules/libraries');
 
-const { isValidPhoneNumber, validateMSISDN } = require('./modules/utilities');
+const lib = require('../../../../modules/libraries');
+const { isValidPhoneNumber, validateMSISDN } = require('../../../../modules/utilities');
 
 const { iv } = require('../../../contants');
 
-const { buyCelo, getContractKit } = require('./modules/celokit');
+const { buyCelo, getContractKit } = require('../../../../modules/celokit');
 
 const kit = getContractKit();
 
 // Celo Functions
 // Parameters: phoneNumber, celoAmount
+// eslint-disable-next-line import/prefer-default-export
 export const dexBuyCelo = async (req, res) => {
   const { phoneNumber } = req.body;
   const _cusdAmount = req.body.cusdAmount;
@@ -22,24 +22,24 @@ export const dexBuyCelo = async (req, res) => {
   try {
     const { permissionLevel } = req.user;
     const targetCountry = getTargetCountry(permissionLevel, req.user.targetCountry);
-    userMSISDN = await validateMSISDN(phoneNumber, targetCountry);
+    const userMSISDN = await validateMSISDN(phoneNumber, targetCountry);
 
     const _isValidKePhoneNumber = await isValidPhoneNumber(userMSISDN, targetCountry);
-    console.log('isValidKePhoneNumber ', _isValidKePhoneNumber);
+    // console.log('isValidKePhoneNumber ', _isValidKePhoneNumber);
 
     if (_isValidKePhoneNumber) {
       const userId = await getUserId(userMSISDN);
-      console.log('UserId: ', userId);
+      // console.log('UserId: ', userId);
 
       const userstatusresult = await checkIfSenderExists(userId);
-      console.log('User Exists? ', userstatusresult);
+      // console.log('User Exists? ', userstatusresult);
       if (userstatusresult === false) { res.json({ status: 'user not found' }); return; }
 
       const userInfo = await getUserDetails(userId);
 
-      console.log('User Address => ', userInfo.data().publicAddress);
+      // console.log('User Address => ', userInfo.data().publicAddress);
       const userprivkey = await lib.getSenderPrivateKey(userInfo.data().seedKey, userMSISDN, iv);
-      console.log(`CUSD Exchange amount: ${_celoAmount}`);
+      // console.log(`CUSD Exchange amount: ${_celoAmount}`);
 
       const receipt = await buyCelo(userInfo.data().publicAddress, `${cusdAmount}`, userprivkey);
 

@@ -1,5 +1,5 @@
 const { countries, generatepin, getAirtelClient } = require('../util');
-const { generateRandomId } = require('../../../../util');
+const { generateReferenceCode } = require('../../../../../modules/jengakit');
 
 const { verifyAmount } = require('../util');
 
@@ -15,7 +15,7 @@ export const airtelDisburse = async (country, amount, msisdn) => {
   const verifiredAmount = verifyAmount(amount);
 
   const genPin = generatepin();
-  const uId = generateRandomId();
+  const uId = generateReferenceCode();
 
   const headers = {
     'X-Country': countryInfo.cc,
