@@ -3,9 +3,14 @@ const express = require('express');
 const cors = require('cors');
 const bearerToken = require('express-bearer-token');
 const bcrypt = require('bcryptjs');
-const { resetPin } = require('./src/auth');
 const api_v2 = express().use(cors({ origin: true }), bearerToken());
+const {  authenticateToken} = require('./modules/libraries')
+const { login ,resetPin , getBalance , userAccountDetails  } = require('./src/auth/index');
+const { kycUserUpdate , kycUserActivate, kycUserCreate } = require('./src/kyc/index');
 
+
+
+require('dotenv').config();
 // KOTANI RESTFUL API
 api_v2.post('/', async (req, res) => {
   if (req.method !== 'POST') {

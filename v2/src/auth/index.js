@@ -11,7 +11,7 @@ const {
   checkisUserKyced,
 } = require('../../modules/libraries');
 const lib = require('../../modules/libraries');
-const { generateAccessToken } = require('../../modules');
+const { generateAccessToken } = require('../../modules/utilities');
 const {
   createcypher,
   sendMessage,
@@ -185,61 +185,66 @@ const getBalance = async (req, res) => {
     //console.log(e); res.json({ status: 400, desc: 'invalid request' }); }
   }
 
-  // 👍🏽
-  export const userAccountDetails = async (req, res) => {
-    //console.log(`Received request for: ${req.url}`);
-    try {
-      const { permissionLevel } = req.user;
-      const targetCountry = getTargetCountry(
-        permissionLevel,
-        req.user.targetCountry
-      );
-      if (
-        permissionLevel !== 'partner' &&
-        permissionLevel !== 'admin' &&
-        permissionLevel !== 'support'
-      ) {
-        return res.json({ status: 400, desc: 'Unauthorized request' });
-      }
-
-      const userMSISDN = await validateMSISDN(
-        `${req.body.phoneNumber}`,
-        targetCountry
-      );
-      const _isValidPhoneNumber = await isValidPhoneNumber(
-        userMSISDN,
-        targetCountry
-      );
-      //console.log(`isValid ${targetCountry} PhoneNumber `, _isValidPhoneNumber);
-
-      if (!_isValidPhoneNumber) {
-        return res.json({
-          status: 400,
-          phoneNumber: `${userMSISDN}`,
-          message: `Invalid ${targetCountry} phoneNumber`,
-        });
-      }
-
-      const userId = await getUserId(userMSISDN);
-      //console.log('UserId: ', userId);
-
-      const userstatusresult = await checkIfSenderExists(userId);
-      //console.log('User Exists? ', userstatusresult);
-      if (!userstatusresult) {
-        return res.json({ status: 400, desc: 'user does not exist' });
-      }
-
-      const userInfo = await getUserDetails(userId);
-      res.json({ status: 201, address: `${userInfo.data().publicAddress}` });
-    } catch (e) {
-      //console.log(e);
-      res.json({ status: 400, desc: 'invalid request' });
-    }
-  };
+ 
 };
+
+
+ // 👍🏽
+ const userAccountDetails = async (req, res) => {
+  //console.log(`Received request for: ${req.url}`);
+  try {
+    const { permissionLevel } = req.user;
+    const targetCountry = getTargetCountry(
+      permissionLevel,
+      req.user.targetCountry
+    );
+    if (
+      permissionLevel !== 'partner' &&
+      permissionLevel !== 'admin' &&
+      permissionLevel !== 'support'
+    ) {
+      return res.json({ status: 400, desc: 'Unauthorized request' });
+    }
+
+    const userMSISDN = await validateMSISDN(
+      `${req.body.phoneNumber}`,
+      targetCountry
+    );
+    const _isValidPhoneNumber = await isValidPhoneNumber(
+      userMSISDN,
+      targetCountry
+    );
+    //console.log(`isValid ${targetCountry} PhoneNumber `, _isValidPhoneNumber);
+
+    if (!_isValidPhoneNumber) {
+      return res.json({
+        status: 400,
+        phoneNumber: `${userMSISDN}`,
+        message: `Invalid ${targetCountry} phoneNumber`,
+      });
+    }
+
+    const userId = await getUserId(userMSISDN);
+    //console.log('UserId: ', userId);
+
+    const userstatusresult = await checkIfSenderExists(userId);
+    //console.log('User Exists? ', userstatusresult);
+    if (!userstatusresult) {
+      return res.json({ status: 400, desc: 'user does not exist' });
+    }
+
+    const userInfo = await getUserDetails(userId);
+    res.json({ status: 201, address: `${userInfo.data().publicAddress}` });
+  } catch (e) {
+    //console.log(e);
+    res.json({ status: 400, desc: 'invalid request' });
+  }
+};
+
 
 module.exports = {
   getBalance,
   resetPin,
   login,
+  userAccountDetails,
 };

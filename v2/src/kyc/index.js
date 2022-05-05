@@ -21,7 +21,7 @@ const {
 const { iv } = require('../contants');
 
 // 👍🏽
-export const kycUserUpdate = async (req, res) => {
+const kycUserUpdate = async (req, res) => {
   try {
     // console.log(`Received request for: ${req.url}`);
     const { phoneNumber } = req.body;
@@ -99,7 +99,7 @@ export const kycUserUpdate = async (req, res) => {
 };
 
 // 👍🏽
-export const kycUserActivate = async (req, res) => {
+const kycUserActivate = async (req, res) => {
   try {
     const { permissionLevel } = req.user;
     if (permissionLevel !== 'admin' || permissionLevel !== 'partner') {
@@ -142,7 +142,7 @@ export const kycUserActivate = async (req, res) => {
   }
 };
 // 👍🏽
-export const kycUserCreate = async (req, res) => {
+const kycUserCreate = async (req, res) => {
   // console.log(`Received request for: ${req.url}`);
   try {
     const { phoneNumber } = req.body;
@@ -181,7 +181,7 @@ export const kycUserCreate = async (req, res) => {
 };
 
 // 👍🏽
-export const kycUserIsVerifiedCheck = async (req, res) => {
+const kycUserIsVerifiedCheck = async (req, res) => {
   // console.log(`Received request for: ${req.url}`);
   try {
     const { phoneNumber } = req.body;
@@ -218,7 +218,7 @@ export const kycUserIsVerifiedCheck = async (req, res) => {
 
 // 👍🏽
 // Parameters: phoneNumber
-export const kycUserGetDetailsByPhone = async (req, res) => {
+const kycUserGetDetailsByPhone = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
     const { permissionLevel } = req.user;
@@ -246,7 +246,7 @@ export const kycUserGetDetailsByPhone = async (req, res) => {
 };
 
 // 👍🏽
-export const kycUserSetDetails = async (req, res) => {
+const kycUserSetDetails = async (req, res) => {
   try {
     // console.log(`Received request for: ${req.url}`);
     const { phoneNumber } = req.body;
@@ -314,7 +314,7 @@ export const kycUserSetDetails = async (req, res) => {
   }
 };
 
-export const programsKycUpdateUser = async (req, res) => {
+const programsKycUpdateUser = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
 
@@ -376,3 +376,10 @@ export const programsKycUpdateUser = async (req, res) => {
     res.json({ status: 400, desc: 'invalid information provided' });
   }
 };
+
+
+module.exports = {
+  kycUserActivate,
+  kycUserCreate,
+  kycUserUpdate,
+}

@@ -13,8 +13,8 @@ var randomstring = require('randomstring');
 var { getAddressUrl, createcypher, decryptcypher } = require('./utilities');
 
 //ENV VARIABLES
-const iv = functions.config().env.crypto_iv.key;
-const phone_hash_fn = functions.config().env.algo.msisdn_hash;
+const { iv , phone_hash_fn } = require('../src/contants/index');
+
 const {
   getPublicAddress,
   generatePrivKey,

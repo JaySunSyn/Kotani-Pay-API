@@ -8,7 +8,7 @@ const phoneUtil =
 const randomstring = require('randomstring');
 const request = require('request');
 const crypto = require('crypto');
-const send = require('gmail-send')(gmailSendOptions);
+const send = require('gmail-send')();
 
 // SEND GET shortURL
 function getSentTxidUrl(txid) {
