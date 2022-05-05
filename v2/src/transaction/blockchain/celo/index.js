@@ -1,9 +1,15 @@
 const {
-  getUserId, getUserDetails, getTargetCountry, checkIfSenderExists,
+  getUserId,
+  getUserDetails,
+  getTargetCountry,
+  checkIfSenderExists,
 } = require('../../../../modules/libraries');
 
 const lib = require('../../../../modules/libraries');
-const { isValidPhoneNumber, validateMSISDN } = require('../../../../modules/utilities');
+const {
+  isValidPhoneNumber,
+  validateMSISDN,
+} = require('../../../../modules/utilities');
 
 const { iv } = require('../../../contants');
 
@@ -21,10 +27,16 @@ export const dexBuyCelo = async (req, res) => {
 
   try {
     const { permissionLevel } = req.user;
-    const targetCountry = getTargetCountry(permissionLevel, req.user.targetCountry);
+    const targetCountry = getTargetCountry(
+      permissionLevel,
+      req.user.targetCountry
+    );
     const userMSISDN = await validateMSISDN(phoneNumber, targetCountry);
 
-    const _isValidKePhoneNumber = await isValidPhoneNumber(userMSISDN, targetCountry);
+    const _isValidKePhoneNumber = await isValidPhoneNumber(
+      userMSISDN,
+      targetCountry
+    );
     // console.log('isValidKePhoneNumber ', _isValidKePhoneNumber);
 
     if (_isValidKePhoneNumber) {
@@ -33,15 +45,26 @@ export const dexBuyCelo = async (req, res) => {
 
       const userstatusresult = await checkIfSenderExists(userId);
       // console.log('User Exists? ', userstatusresult);
-      if (userstatusresult === false) { res.json({ status: 'user not found' }); return; }
+      if (userstatusresult === false) {
+        res.json({ status: 'user not found' });
+        return;
+      }
 
       const userInfo = await getUserDetails(userId);
 
       // console.log('User Address => ', userInfo.data().publicAddress);
-      const userprivkey = await lib.getSenderPrivateKey(userInfo.data().seedKey, userMSISDN, iv);
+      const userprivkey = await lib.getSenderPrivateKey(
+        userInfo.data().seedKey,
+        userMSISDN,
+        iv
+      );
       // console.log(`CUSD Exchange amount: ${_celoAmount}`);
 
-      const receipt = await buyCelo(userInfo.data().publicAddress, `${cusdAmount}`, userprivkey);
+      const receipt = await buyCelo(
+        userInfo.data().publicAddress,
+        `${cusdAmount}`,
+        userprivkey
+      );
 
       res.json({ status: 201, details: `${receipt}` });
     } else {
