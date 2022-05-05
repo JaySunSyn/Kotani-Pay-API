@@ -1,10 +1,7 @@
-{ 
-"useTabs": true,
-"tabSize": 2,
-"semi": true,
-"singleQuote": true,
-"trailingComma": "es5",
-"bracketSpacing": true,
-"parser":"javascript"
-
+{
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true
 }

@@ -1,6 +1,10 @@
 // CElO init
 const contractkit = require('@celo/contractkit');
-const { privateToPublic, pubToAddress, toChecksumAddress } = require('ethereumjs-util');
+const {
+  privateToPublic,
+  pubToAddress,
+  toChecksumAddress,
+} = require('ethereumjs-util');
 const bip39 = require('bip39-light');
 
 const NODE_URL = 'https://celo-mainnet--rpc.datahub.figment.io/apikey/API_KEY/';
@@ -15,8 +19,10 @@ const axios = require('axios');
 const moment = require('moment');
 const impactUBI = require('../ABIs/ImpactUBI.json');
 
-const trimLeading0x = (input) => (input.startsWith('0x') ? input.slice(2) : input);
-const ensureLeading0x = (input) => (input.startsWith('0x') ? input : `0x${input}`);
+const trimLeading0x = (input) =>
+  input.startsWith('0x') ? input.slice(2) : input;
+const ensureLeading0x = (input) =>
+  input.startsWith('0x') ? input : `0x${input}`;
 const hexToBuffer = (input) => Buffer.from(trimLeading0x(input), 'hex');
 
 exports.getContractKit = () => kit;
@@ -29,7 +35,8 @@ exports.getPublicAddress = async (mnemonic) => {
   });
 };
 
-const generatePrivKey = async (mnemonic) => bip39.mnemonicToSeedHex(mnemonic).substr(0, 64);
+const generatePrivKey = async (mnemonic) =>
+  bip39.mnemonicToSeedHex(mnemonic).substr(0, 64);
 exports.generatePrivKey = generatePrivKey;
 
 const getPublicKey = (privateKey) => {
@@ -68,12 +75,14 @@ const getTransactionBlock = async (txhash) => {
 };
 exports.getTransactionBlock = getTransactionBlock;
 
-const weiToDecimal = async (valueInWei) => kit.web3.utils.fromWei(valueInWei.toString(), 'ether'); // value/1e+18
+const weiToDecimal = async (valueInWei) =>
+  kit.web3.utils.fromWei(valueInWei.toString(), 'ether'); // value/1e+18
 // return valueInWei/1e+18 ;
 
 exports.weiToDecimal = weiToDecimal;
 
-const decimaltoWei = async (valueInDecimal) => kit.web3.utils.toWei(valueInDecimal.toString(), 'ether'); // value*1e+18
+const decimaltoWei = async (valueInDecimal) =>
+  kit.web3.utils.toWei(valueInDecimal.toString(), 'ether'); // value*1e+18
 
 exports.decimaltoWei = decimaltoWei;
 
@@ -91,7 +100,9 @@ exports.sendcUSD = async (sender, receiver, cusdAmount, privatekey) => {
     kit.addAccount(privatekey);
     // console.log(`${_cusdbalance} USD balance is sufficient to fulfil ${cusdAmount}`);
     const _cusdAmount = await decimaltoWei(`${parseFloat(cusdAmount, 4)}`);
-    const tx = await cusdtoken.transfer(receiver, _cusdAmount).send({ from: sender });
+    const tx = await cusdtoken
+      .transfer(receiver, _cusdAmount)
+      .send({ from: sender });
 
     const hash = await tx.getHash();
     const receipt = await tx.waitReceipt();
@@ -102,13 +113,20 @@ exports.sendcUSD = async (sender, receiver, cusdAmount, privatekey) => {
   return 'failed';
 };
 
-exports.approveTransferFrom = async (approvedAddress, approvedAmount, address, privatekey) => {
+exports.approveTransferFrom = async (
+  approvedAddress,
+  approvedAmount,
+  address,
+  privatekey
+) => {
   try {
     kit.setFeeCurrency(contractkit.CeloContract.StableToken);
     kit.addAccount(privatekey);
 
     const cusdtoken = await kit.contracts.getStableToken();
-    const approveTx = await cusdtoken.approve(approvedAddress, approvedAmount).send({ from: address });
+    const approveTx = await cusdtoken
+      .approve(approvedAddress, approvedAmount)
+      .send({ from: address });
     const approveReceipt = await approveTx.waitReceipt();
     return approveReceipt;
   } catch (e) {
@@ -119,19 +137,27 @@ exports.approveTransferFrom = async (approvedAddress, approvedAmount, address, p
 exports.sendUBIClaim = async (sender, privatekey, UBISCADDRESS) => {
   // let impactMkt_KakumaCommunity_ContractAddress = "0x667973de162C7032e816041a1Eef42261901EbE3";
   const isBeneficiary = await checkIfBeneficiary(sender, UBISCADDRESS);
-  if (isBeneficiary !== 1) { console.log('Not a valid beneficiary'); return { status: 'NOT_REGISTERED' }; }
+  if (isBeneficiary !== 1) {
+    console.log('Not a valid beneficiary');
+    return { status: 'NOT_REGISTERED' };
+  }
   const claimCountdown = await checkClaimCountdown(sender);
   const _timeStamp = moment().unix();
-  console.log(`Beneficiary: ${sender} :: Last ClaimTime : ${claimCountdown} :: CurrentTime : ${_timeStamp} `);
-  if (claimCountdown === 0) { console.log('Invalid claim status'); return { status: 'NOT_YET', claimTime: claimCountdown }; }
-  if (claimCountdown >= _timeStamp) { console.log('Not yet time to claim'); return { status: 'NOT_YET', claimTime: claimCountdown }; }
+  console.log(
+    `Beneficiary: ${sender} :: Last ClaimTime : ${claimCountdown} :: CurrentTime : ${_timeStamp} `
+  );
+  if (claimCountdown === 0) {
+    console.log('Invalid claim status');
+    return { status: 'NOT_YET', claimTime: claimCountdown };
+  }
+  if (claimCountdown >= _timeStamp) {
+    console.log('Not yet time to claim');
+    return { status: 'NOT_YET', claimTime: claimCountdown };
+  }
   try {
     kit.addAccount(privatekey);
     // const tx = await cusdtoken.transfer(receiver, _cusdAmount).send({ from: sender, });
-    const ubiContract = new web3.eth.Contract(
-      impactUBI,
-      UBISCADDRESS,
-    );
+    const ubiContract = new web3.eth.Contract(impactUBI, UBISCADDRESS);
 
     // const receipt = await ubiContract.methods.claim().send({ from: sender });
     // console.log(`Impact Claim Transaction hash: ${receipt.transactionHash}`);
@@ -152,10 +178,7 @@ exports.sendUBIClaim = async (sender, privatekey, UBISCADDRESS) => {
 
 exports.checkIfBeneficiary = async (sender, UBISCADDRESS) => {
   try {
-    const ubiContract = new web3.eth.Contract(
-      impactUBI,
-      UBISCADDRESS,
-    );
+    const ubiContract = new web3.eth.Contract(impactUBI, UBISCADDRESS);
 
     return await ubiContract.methods.beneficiaries(sender).call();
   } catch (e) {
@@ -164,7 +187,12 @@ exports.checkIfBeneficiary = async (sender, UBISCADDRESS) => {
   }
 };
 
-exports.addBeneficiary = async (manager, _beneficiary, privatekey, UBISCADDRESS) => {
+exports.addBeneficiary = async (
+  manager,
+  _beneficiary,
+  privatekey,
+  UBISCADDRESS
+) => {
   const isBeneficiary = await checkIfBeneficiary(_beneficiary, UBISCADDRESS);
   if (isBeneficiary === 1) {
     console.log('Already added as a beneficiary');
@@ -174,12 +202,11 @@ exports.addBeneficiary = async (manager, _beneficiary, privatekey, UBISCADDRESS)
   try {
     kit.addAccount(privatekey);
     // const tx = await cusdtoken.transfer(receiver, _cusdAmount).send({ from: sender, });
-    const ubiContract = new web3.eth.Contract(
-      impactUBI,
-      UBISCADDRESS,
-    );
+    const ubiContract = new web3.eth.Contract(impactUBI, UBISCADDRESS);
 
-    const receipt = await ubiContract.methods.addBeneficiary(_beneficiary).send({ from: manager });
+    const receipt = await ubiContract.methods
+      .addBeneficiary(_beneficiary)
+      .send({ from: manager });
     // console.log(`Transaction hash: ${receipt.transactionHash}`);
 
     // const txObject = await ubiContract.methods.addBeneficiary(_beneficiary);
@@ -198,10 +225,7 @@ exports.addBeneficiary = async (manager, _beneficiary, privatekey, UBISCADDRESS)
 
 exports.checkIfManager = async (signer, UBISCADDRESS) => {
   try {
-    const ubiContract = new web3.eth.Contract(
-      impactUBI,
-      UBISCADDRESS,
-    );
+    const ubiContract = new web3.eth.Contract(impactUBI, UBISCADDRESS);
 
     return await ubiContract.methods.beneficiaries(signer).call();
   } catch (e) {
@@ -223,10 +247,7 @@ exports.heckUbiScBalance = async (UBISCADDRESS) => {
 
 exports.checkClaimCountdown = async (sender) => {
   try {
-    const ubiContract = new web3.eth.Contract(
-      impactUBI,
-      UBISCADDRESS,
-    );
+    const ubiContract = new web3.eth.Contract(impactUBI, UBISCADDRESS);
 
     return await ubiContract.methods.cooldown(sender).call();
   } catch (e) {
@@ -245,18 +266,28 @@ exports.buyCelo = async (address, cusdAmount, privatekey) => {
   cusdbalance = `${await cusdtoken.balanceOf(address)}`;
   console.log(`CUSD Balance: ${kit.web3.utils.fromWei(cusdbalance)}`);
 
-  const tx = await cusdtoken.approve(exchange.address, cusdAmount).send({ from: address });
+  const tx = await cusdtoken
+    .approve(exchange.address, cusdAmount)
+    .send({ from: address });
   // console.log(tx)
   const receipt = await tx.waitReceipt();
   // console.log(receipt)
 
   const celoAmount = `${await exchange.quoteUsdSell(cusdAmount)}`;
-  console.log(`You will receive ${kit.web3.utils.fromWei(celoAmount, 'ether')} CELO`);
-  const buyCeloTx = await exchange.sellDollar(cusdAmount, celoAmount).send({ from: address });
+  console.log(
+    `You will receive ${kit.web3.utils.fromWei(celoAmount, 'ether')} CELO`
+  );
+  const buyCeloTx = await exchange
+    .sellDollar(cusdAmount, celoAmount)
+    .send({ from: address });
   const buyCeloReceipt = await buyCeloTx.waitReceipt();
   console.log(buyCeloReceipt);
 
-  return { celoAmount: `${kit.web3.utils.fromWei(celoAmount, 'ether')}`, symbol: 'CELO', txid: buyCeloReceipt };
+  return {
+    celoAmount: `${kit.web3.utils.fromWei(celoAmount, 'ether')}`,
+    symbol: 'CELO',
+    txid: buyCeloReceipt,
+  };
 };
 
 exports.sellCelo = async (address, celoAmount, privatekey) => {
@@ -271,14 +302,18 @@ exports.sellCelo = async (address, celoAmount, privatekey) => {
   const celobalance = `${await celotoken.balanceOf(address)}`;
   console.log(`CELO Balance: ${kit.web3.utils.fromWei(celobalance, 'ether')}`);
 
-  const tx = await celotoken.approve(exchange.address, celoAmount).send({ from: address });
+  const tx = await celotoken
+    .approve(exchange.address, celoAmount)
+    .send({ from: address });
   // console.log(tx)
   const receipt = await tx.waitReceipt();
   // console.log(receipt)
 
   const cusdAmount = `${await exchange.quoteGoldSell(celoAmount)}`;
   console.log(`You will receive ${kit.web3.utils.fromWei(cusdAmount)} CUSD`);
-  const sellCeloTx = await exchange.sellGold(celoAmount, cusdAmount).send({ from: address });
+  const sellCeloTx = await exchange
+    .sellGold(celoAmount, cusdAmount)
+    .send({ from: address });
   const sellCeloReceipt = await sellCeloTx.waitReceipt();
   console.log(sellCeloReceipt);
   // }
@@ -293,18 +328,23 @@ exports.sendCELO = async (sender, receiver, amount, privatekey) => {
   const celotoken = await kit.contracts.getGoldToken();
   const balance = await celotoken.balanceOf(sender);
 
-  let _balance = balance / 1e+18; // weiToDecimal(balance);
+  let _balance = balance / 1e18; // weiToDecimal(balance);
   console.log('CELO Balance: ', _balance);
   _balance = parseFloat(_balance);
   if (amount < _balance) {
     console.log(`${_balance} CELO balance is sufficient`);
     const _amount = await decimaltoWei(amount);
-    const tx = await celotoken.transfer(receiver, _amount).send({ from: sender });
+    const tx = await celotoken
+      .transfer(receiver, _amount)
+      .send({ from: sender });
 
     const hash = await tx.getHash();
     const receipt = await tx.waitReceipt();
 
-    console.log('CELO Transaction ID:..... ', JSON.stringify(receipt.transactionHash));
+    console.log(
+      'CELO Transaction ID:..... ',
+      JSON.stringify(receipt.transactionHash)
+    );
     return receipt;
   }
   console.log('Insufficient CELO Balance');
@@ -316,12 +356,16 @@ exports.validateWithdrawHash = async (hash, escrowAddress) => {
     const tx = await provider.getTransactionReceipt(hash);
     console.log('FROM: ', tx.from);
 
-    const response = await axios.get(`https://explorer.celo.org/api?module=account&action=tokentx&address=${tx.from}#`);
+    const response = await axios.get(
+      `https://explorer.celo.org/api?module=account&action=tokentx&address=${tx.from}#`
+    );
     // console.log(response.data.result.hash);
     const txhashes = response.data.result;
     const kotanitxns = await txhashes.filter((txns) => txns.hash == hash);
     // console.log(kotanitxns);
-    const tokotani = await kotanitxns.filter((txns) => txns.to == escrowAddress);
+    const tokotani = await kotanitxns.filter(
+      (txns) => txns.to == escrowAddress
+    );
     // console.log(JSON.stringify(tokotani));
     const txvalues = {
       status: 'ok',
