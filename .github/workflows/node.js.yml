@@ -31,6 +31,4 @@ jobs:
         cache: 'yarn' 
         cache-dependency-path: v2/yarn.lock
     - run: yarn 
-    - run: yarn lint
-    - run: yarn test
-    - run: yarn test:cov
+
