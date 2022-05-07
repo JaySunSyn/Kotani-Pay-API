@@ -1,6 +1,6 @@
-const admin = require('firebase-admin');
+const admin = {} //require('firebase-admin');
 
-const firestore = admin.firestore();
+const firestore = {} // admin.firestore();
 const { invalid } = require('moment');
 const {
   getUserId,
@@ -162,7 +162,7 @@ const kycUserCreate = async (req, res) => {
 
     const userMSISDN = await validateMSISDN(phoneNumber, targetCountry);
 
-    const userId = await lib.getUserId(userMSISDN);
+    //const userId = await lib.getUserId(userMSISDN);
     // console.log('senderId: ', userId);
     const userExists = await lib.checkIfSenderExists(userId);
     // console.log('Sender Exists? ', userExists);
@@ -171,7 +171,7 @@ const kycUserCreate = async (req, res) => {
     }
 
     if (!userExists) {
-      await lib.createNewUser(userId, userMSISDN);
+      await lib.createNewUser(userMSISDN);
       // console.log('Created user with userID: ', userId);
       res.json({ status: 201, userId });
     }
