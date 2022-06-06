@@ -1,73 +1,54 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="https://kotanipay.com/" target="blank"><img src="https://2655951489-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FhonoqUXGYYiDPsMOyqhQ%2Fuploads%2FZpMntLQe2ILzTIoxukWl%2FKotani%20Pay%20logo_Light%20background.png?alt=media&token=a88be60e-52db-49a2-aaf5-5f6925d147c1" width="320" alt="Nest Logo" /></a>
 </p>
+Kotani Pay API
+==============
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+API for Kotani Pay platform
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## :house: Overview
 
-## Installation
+Kotani Pay is a stablecoin to fiat off-ramp and off-ramp service.
+The service is offered as an end to end API (Application Programming Interface) to enable other businesses to integrate and also as a USSD (Unstructured Supplementary Service Data) application for end-users to convert stablecoins to local fiat.
 
-```bash
-$ npm install
-```
+[**Read more at docs.kotanipay.com**](https://docs.kotanipay.com/).
 
-## Running the app
 
-```bash
-# development
-$ npm run start
+## :information_source: About Kotani Pay
 
-# watch mode
-$ npm run start:dev
+* Read the [project charter](https://docs.kotanipay.com/fundamentals/project-charter) to know more about the vision, mission, and community for Kotani Pay.
+* The Kotani Pay Code of Conduct is our pledge to diversity and inclusion in our project.
+  See [our Code of Conduct](https://docs.kotanipay.com/fundamentals/code-of-conduct).
 
-# production mode
-$ npm run start:prod
-```
 
-## Test
+## :wrench: How to create a development environment
 
-```bash
-# unit tests
-$ npm run test
+Our documentation has more complete information on how to set up a development environment for the API:
 
-# e2e tests
-$ npm run test:e2e
+* [Using macOS](https://docs.kotanipay.com/guides/getting-started-with-the-api/local-environment/using-mac-os)
+* [Using Windows](https://docs.kotanipay.com/guides/getting-started-with-the-api/local-environment/using-windows)
 
-# test coverage
-$ npm run test:cov
-```
 
-## Support
+## :memo: Legal
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+MIT License, © 2020-2021 Kotani Labs
 
-## Stay in touch
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+[_From choosealicense.com_](https://choosealicense.com/licenses/mit/):
+> A short and simple permissive license with conditions only requiring preservation of copyright and license notices.
+> Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+>
+> * **Permissions**:
+    >     * Commercial use
+>     * Distribution
+>     * Modification
+>     * Private use
+> * **Conditions**:
+    >     * License and copyright notice
+> * **Limitations**:
+    > 	  * Liability
+             > 	  * Warranty
