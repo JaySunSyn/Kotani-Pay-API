@@ -14,7 +14,6 @@ const kit = contractkit.newKit(NODE_URL);
 
 @Injectable()
 export class BlockchainService {
-  //ChangeLog: Should return 24 hex
   getUserId = (senderMSISDN): Promise<string> => {
     return new Promise((resolve) => {
       const senderId = crypto
@@ -26,8 +25,8 @@ export class BlockchainService {
   };
 
   retreiveCusdBalance = async (publicAddress: string) => {
-    const cusdtoken = await kit.contracts.getStableToken();
-    return await cusdtoken.balanceOf(publicAddress); // In cUSD
+    const cusdToken = await kit.contracts.getStableToken();
+    return await cusdToken.balanceOf(publicAddress); // In cUSD
   };
 
   async createAccountInfo(phone: string): Promise<Partial<AccountInterface>> {
@@ -39,17 +38,4 @@ export class BlockchainService {
       publicAddress: publicAddress,
     };
   }
-
-  getUserPrivateKey = async (seedCypher, senderMSISDN, iv) => {
-    // try {
-    //   const senderSeed = await decryptcypher(seedCypher, senderMSISDN, iv);
-    //   const senderprivkey = `${await generatePrivKey(senderSeed)}`;
-    //   return new Promise((resolve) => {
-    //     resolve(senderprivkey);
-    //   });
-    // } catch (err) {
-    //   console.log('Unable to decrypt cypher');
-    // }
-    return '';
-  };
 }

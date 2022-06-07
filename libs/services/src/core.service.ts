@@ -43,20 +43,14 @@ export class CoreService {
   }
 
   async setUserKyc(kycData: SetKycDto, userId: string) {
-    try {
-      const isUserKyc = this.repo.checkisUserKyced(userId);
-
-      if (isUserKyc) {
-        throw new Error('User is Already Kycd');
-      }
-
-      return await this.repo.setUserKyc({
-        _id: userId,
-        ...kycData,
-      });
-    } catch (e) {
-      throw new Error(e.message);
+    const isUserKyc = this.repo.checkisUserKyced(userId);
+    if (isUserKyc) {
+      throw new HttpException('User is Already Kycd', HttpStatus.CONFLICT);
     }
+    return await this.repo.setUserKyc({
+      _id: userId,
+      ...kycData,
+    });
   }
 
   async getBalance(id: string) {
@@ -67,7 +61,7 @@ export class CoreService {
       );
       return {
         success: true,
-        Balance: cUsdBalance,
+        balance: cUsdBalance,
       };
     } catch (e) {
       throw new Error(e.message);

@@ -33,8 +33,8 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard)
   @Post('kyc')
-  async addUserKyc(@Body() setKycdata: SetKycDto) {
-    return await this.coreService.setUserKyc(setKycdata, 'userId');
+  async addUserKyc(@Body() setKycData: SetKycDto) {
+    return await this.coreService.setUserKyc(setKycData, 'userId');
   }
 
   @UseGuards(JwtAuthGuard)

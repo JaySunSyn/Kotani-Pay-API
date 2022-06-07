@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoreService } from '@kotanicore/services';
+import { Promise } from 'mongoose';
+import { AuthService } from '@kotanicore/auth';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -10,23 +12,36 @@ describe('AppController', () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
       providers: [
-        {
-          provide: AppService,
-          useValue: {
-            getHello: jest.fn().mockResolvedValue('Hi from  Kotani OpenSource'),
-          },
-        },
+        AppService,
         {
           provide: CoreService,
           useValue: {
-            getBalance: jest.fn().mockResolvedValue([]),
+            getBalance: jest.fn().mockImplementation(() =>
+              Promise.resolve({
+                success: true,
+                balance: 2.78,
+              }),
+            ),
             initiateWithdrawal: jest
               .fn()
               .mockImplementation(() => Promise.resolve({})),
-            addUserKyc: jest.fn().mockImplementation(() => Promise.resolve({})),
-            createUser: jest.fn().mockImplementation(() => Promise.resolve({})),
-            login: jest.fn().mockImplementation(() => Promise.resolve()),
+            addUserKyc: jest
+              .fn()
+              .mockImplementation(() => Promise.resolve({ success: true })),
+            createUser: jest.fn().mockImplementation(() =>
+              Promise.resolve({
+                id: 'xx',
+                email: 'Ej@gmail.com',
+                name: 'Ej',
+                phoneNumber: '2547123456',
+              }),
+            ),
+            login: jest.fn().mockImplementation(() => Promise.resolve({})),
           },
+        },
+        {
+          provide: AuthService,
+          useValue: {},
         },
       ],
     }).compile();
@@ -34,79 +49,65 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
+  describe('Login', () => {
+    it('should return access token ', async () => {
+      await expect(
+        appController.login({
+          password: '',
+          phone: '',
+        }),
+      ).resolves.toBe({});
+    });
+  });
+
   describe('root Controller', () => {
     it('should return "\'Hi from  Kotani OpenSource \'"', () => {
-      expect(appController.getHello()).toBe('Hi from  Kotani OpenSource');
+      expect(appController.getHello()).toBe('Hi from  Kotani Open Source!');
     });
   });
 
   describe('get-balance', () => {
-    it('should return "Hello World!"', () => {
-      expect(
+    it('Should return success if provided with phone"', async () => {
+      await expect(
         appController.getBalance({
-          phoneNumber: '',
+          phoneNumber: '254726123456',
         }),
-      ).toBe('Hello World!');
-    });
-
-    it('should return Balance if authenticated"', () => {
-      expect(
-        appController.getBalance({
-          phoneNumber: '',
-        }),
-      ).toBe('Hello World!');
-    });
-
-    it('should throw unauthorised exception if user ot authenticated', () => {
-      expect(
-        appController.getBalance({
-          phoneNumber: '',
-        }),
-      ).toBe('Hello World!');
+      ).resolves.toEqual({
+        success: true,
+        balance: 2.78,
+      });
     });
   });
 
   describe('set-kyc', () => {
-    it('should return user kyc data ', () => {
-      expect(
+    it('should return user kyc data ', async () => {
+      await expect(
         appController.addUserKyc({
           dateOfBirth: '',
           documentNumber: '12223344',
           documentType: 'PassPort',
         }),
-      ).toBe('Hello World!');
-    });
-
-    it('should throw error if Input data is wrong ', () => {
-      expect(
-        appController.addUserKyc({
-          dateOfBirth: '',
-          documentNumber: '12223344',
-          documentType: 'PassPort',
-        }),
-      ).toBe('Hello World!');
+      ).resolves.toBe({
+        success: true,
+      });
     });
   });
 
   describe('create-user', () => {
-    it('should return create User if data is clean', () => {
-      expect(
+    it('should return create User if data is clean', async () => {
+      await expect(
         appController.createUser({
           email: 'Ej@gmail.com',
           name: 'Ej',
           phoneNumber: '2547123456',
+          password: 'password',
         }),
-      ).toBe('Hello World!');
-    });
-
-    it('should not create user with bad input ', () => {
-      expect(
-        appController.createUser({
-          email: 'Email',
-          name: '',
-          phoneNumber: '1111111111',
-        }),
-      ).toThrowError();
+      ).resolves.toStrictEqual({
+        id: 'xx',
+        email: 'Ej@gmail.com',
+        name: 'Ej',
+        phoneNumber: '2547123456',
+      });
     });
   });
 });

@@ -27,6 +27,7 @@ describe('CoreService', () => {
           phoneNumber: '+254722123456',
           name: 'ELijah',
           email: 'ej@gmail.com',
+          password: '',
         }),
       ).toBeDefined();
     });
