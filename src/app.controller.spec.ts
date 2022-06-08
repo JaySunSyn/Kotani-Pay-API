@@ -41,12 +41,22 @@ describe('AppController', () => {
         },
         {
           provide: AuthService,
-          useValue: {},
+          useValue: {
+            validateUser: jest
+              .fn()
+              .mockImplementation(() => Promise.resolve({})),
+          },
         },
       ],
     }).compile();
 
     appController = app.get<AppController>(AppController);
+  });
+
+  describe('root Controller', () => {
+    it('should return "\'Hi from  Kotani OpenSource \'"', () => {
+      expect(appController.getHello()).toBe('Hi from  Kotani Open Source!');
+    });
   });
 
   describe('Login', () => {
@@ -57,12 +67,6 @@ describe('AppController', () => {
           phone: '',
         }),
       ).resolves.toBe({});
-    });
-  });
-
-  describe('root Controller', () => {
-    it('should return "\'Hi from  Kotani OpenSource \'"', () => {
-      expect(appController.getHello()).toBe('Hi from  Kotani Open Source!');
     });
   });
 

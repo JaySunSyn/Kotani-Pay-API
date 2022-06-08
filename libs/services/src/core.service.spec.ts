@@ -1,16 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CoreService } from './core.service';
-import { RepositoryModule, RepositoryService } from '@kotanicore/repository';
-import { BlockchainService } from '@kotanicore/blockchain';
 
 describe('CoreService', () => {
   let service: CoreService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [RepositoryModule],
-      providers: [CoreService, BlockchainService],
-      exports: [BlockchainService],
+      imports: [],
+      providers: [],
+      exports: [],
     }).compile();
 
     service = module.get<CoreService>(CoreService);

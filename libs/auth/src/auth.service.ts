@@ -10,7 +10,6 @@ export class AuthService {
   ) {}
 
   async validateUser(phone: string, password: string) {
-
     const user = await this.repo.checkIfUserExists(phone);
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
