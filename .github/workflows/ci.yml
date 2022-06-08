@@ -31,11 +31,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
         cache-dependency-path: v2/yarn.lock
-      - run: yarn
-      - run : yarn lint
-      - run : yarn test
-      - run : yarn test:cov
-      - name: Upload coverage reports to Codecov with GitHub Action
-        uses: codecov/codecov-action@v3
+    - run: yarn
+    - run : yarn lint
+    - run : yarn test
+    - run : yarn test:cov
+    - name: Upload coverage reports to Codecov with GitHub Action
+      uses: codecov/codecov-action@v3
 
 
