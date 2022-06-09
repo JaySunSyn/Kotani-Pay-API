@@ -28,7 +28,6 @@ jobs:
     - run: yarn
     - run : yarn lint
     - run : yarn test:cov
-    - run : yarn test
     - name: Upload coverage reports to Codecov with GitHub Action
       uses: codecov/codecov-action@v3
 
