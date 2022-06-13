@@ -27,8 +27,8 @@ jobs:
         cache-dependency-path: yarn.lock
     - run: yarn
     - run : yarn lint
-    - run : yarn test:cov
     - run : yarn test
+    - run : yarn test:cov
     - name: Upload coverage reports to Codecov with GitHub Action
       uses: codecov/codecov-action@v3
 
