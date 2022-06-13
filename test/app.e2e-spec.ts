@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -19,27 +19,24 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hi from  Kotani OpenSource');
+      .expect('Hi from  Kotani Open Source!');
   });
 
-  it('/CreateUser  (Post)', () => {
-    return request(app.getHttpServer())
-      .post('/create')
-      .expect(201)
-      .expect('Hi from  Kotani OpenSource');
+  describe('/CreateUser', () => {
+    it(' Should NOT CreateUser if no data is provided', () => {
+      return request(app.getHttpServer()).post('/create').expect(400);
+    });
   });
 
-  it('/set KYC  (Post)', () => {
-    return request(app.getHttpServer())
-      .post('/kyc')
-      .expect(201)
-      .expect('Hi from  Kotani OpenSource');
+  describe('/set KYC', () => {
+    it('Should NOT set  if not authorized ', () => {
+      return request(app.getHttpServer()).post('/kyc').expect(401);
+    });
   });
 
-  it('/Get Balance  (GEt)', () => {
-    return request(app.getHttpServer())
-      .get('/balance')
-      .expect(200)
-      .expect('Hi from  Kotani OpenSource');
+  describe('/Get Balance  (GEt)', () => {
+    it('Should NOT fetch if unaothrzed', () => {
+      return request(app.getHttpServer()).get('/balance').expect(401);
+    });
   });
 });
