@@ -25,7 +25,7 @@ describe('AppController', () => {
             initiateWithdrawal: jest
               .fn()
               .mockImplementation(() => Promise.resolve({})),
-            addUserKyc: jest
+            setUserKyc: jest
               .fn()
               .mockImplementation(() => Promise.resolve({ success: true })),
             createUser: jest.fn().mockImplementation(() =>
@@ -36,7 +36,6 @@ describe('AppController', () => {
                 phoneNumber: '2547123456',
               }),
             ),
-            login: jest.fn().mockImplementation(() => Promise.resolve({})),
           },
         },
         {
@@ -45,6 +44,11 @@ describe('AppController', () => {
             validateUser: jest
               .fn()
               .mockImplementation(() => Promise.resolve({})),
+            login: jest
+              .fn()
+              .mockImplementation(() =>
+                Promise.resolve({ token: 'testToken' }),
+              ),
           },
         },
       ],
@@ -66,7 +70,7 @@ describe('AppController', () => {
           password: '',
           phone: '',
         }),
-      ).resolves.toBe({});
+      ).resolves.toStrictEqual({ token: 'testToken' });
     });
   });
 
@@ -91,7 +95,7 @@ describe('AppController', () => {
           documentNumber: '12223344',
           documentType: 'PassPort',
         }),
-      ).resolves.toBe({
+      ).resolves.toStrictEqual({
         success: true,
       });
     });

@@ -26,8 +26,10 @@ export class CoreService {
         ...userData,
       });
 
+      const mme = await this.blockService.createMnemonic();
       const account = await this.blockService.createAccountInfo(
         userData.phoneNumber,
+        mme,
       );
 
       await this.repo.createAccount({
@@ -56,7 +58,7 @@ export class CoreService {
   async getBalance(id: string) {
     try {
       const account = await this.repo.getAccountInfo(id);
-      const cUsdBalance = this.blockService.retreiveCusdBalance(
+      const cUsdBalance = await this.blockService.retreiveCusdBalance(
         account.publicAddress,
       );
       return {

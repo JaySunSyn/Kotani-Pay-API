@@ -1,1 +1,1 @@
-export * from './base-firestore.repository';
+//export * from './base-firestore.repository';

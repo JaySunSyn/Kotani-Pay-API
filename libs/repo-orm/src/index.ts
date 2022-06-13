@@ -1,2 +1,2 @@
 export * from './mongo';
-export * from './firebase';
+//export * from './firebase';

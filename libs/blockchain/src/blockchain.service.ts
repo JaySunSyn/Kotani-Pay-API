@@ -29,8 +29,12 @@ export class BlockchainService {
     return await cusdToken.balanceOf(publicAddress); // In cUSD
   };
 
-  async createAccountInfo(phone: string): Promise<Partial<AccountInterface>> {
-    const mnemonic = await bip39.generateMnemonic(256);
+  createMnemonic = async () => await bip39.generateMnemonic(256);
+
+  async createAccountInfo(
+    phone: string,
+    mnemonic: string,
+  ): Promise<Partial<AccountInterface>> {
     const enc_seed = await createcypher(mnemonic, phone, iv);
     const publicAddress = await getPublicAddress(mnemonic);
     return {
