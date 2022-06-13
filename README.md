@@ -5,7 +5,7 @@ Kotani Pay API
 ==============
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
+[![codecov](https://codecov.io/gh/Kotani-Pay/Kotani-Pay-API/branch/test-coverage/graph/badge.svg?token=ZD59SAE7NX)](https://codecov.io/gh/Kotani-Pay/Kotani-Pay-API)
 
 API for Kotani Pay platform
 
