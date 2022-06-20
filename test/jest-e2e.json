@@ -1,0 +1,29 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@kotanicore/kyc/(.*)": "<rootDir>/../libs/kyc/src/$1",
+    "@kotanicore/kyc": "<rootDir>/../libs/kyc/src",
+    "@kotanicore/blockchain/(.*)": "<rootDir>/../libs/blockchain/src/$1",
+    "@kotanicore/blockchain": "<rootDir>/../libs/blockchain/src",
+    "@kotanicore/auth/(.*)": "<rootDir>/../libs/auth/src/$1",
+    "@kotanicore/auth": "<rootDir>/../libs/auth/src",
+    "@kotanicore/repository/(.*)": "<rootDir>/../libs/repository/src/$1",
+    "@kotanicore/repository": "<rootDir>/../libs/repository/src",
+    "@kotanicore/repo-orm/(.*)": "<rootDir>/../libs/repo-orm/src/$1",
+    "@kotanicore/repo-orm": "<rootDir>/../libs/repo-orm/src",
+    "kotanicore/core/(.*)": "<rootDir>/../libs/core/src/$1",
+    "kotanicore/core": "<rootDir>/../libs/core/src",
+    "@kotanicore/services/(.*)": "<rootDir>/../libs/services/src/$1",
+    "@kotanicore/services": "<rootDir>/../libs/services/src"
+  }
+}

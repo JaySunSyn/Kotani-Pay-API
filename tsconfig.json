@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "paths": {
+      "@kotanicore/kyc": [
+        "libs/kyc/src"
+      ],
+      "@kotanicore/kyc/*": [
+        "libs/kyc/src/*"
+      ],
+      "@kotanicore/blockchain": [
+        "libs/blockchain/src"
+      ],
+      "@kotanicore/blockchain/*": [
+        "libs/blockchain/src/*"
+      ],
+      "@kotanicore/auth": [
+        "libs/auth/src"
+      ],
+      "@kotanicore/auth/*": [
+        "libs/auth/src/*"
+      ],
+      "@kotanicore/repository": [
+        "libs/repository/src"
+      ],
+      "@kotanicore/repository/*": [
+        "libs/repository/src/*"
+      ],
+      "@kotanicore/repo-orm": [
+        "libs/repo-orm/src"
+      ],
+      "@kotanicore/repo-orm/*": [
+        "libs/repo-orm/src/*"
+      ],
+      "kotanicore/core": [
+        "libs/core/src"
+      ],
+      "kotanicore/core/*": [
+        "libs/core/src/*"
+      ],
+      "@kotanicore/services": [
+        "libs/services/src"
+      ],
+      "@kotanicore/services/*": [
+        "libs/services/src/*"
+      ]
+    }
+  }
+}
