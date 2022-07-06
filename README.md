@@ -12,7 +12,7 @@ API for Kotani Pay platform
 
 ## :house: Overview
 
-Kotani Pay is a stablecoin to fiat off-ramp and off-ramp service.
+Kotani Pay is a stablecoin to fiat on-ramp and off-ramp service.
 The service is offered as an end to end API (Application Programming Interface) to enable other businesses to integrate and also as a USSD (Unstructured Supplementary Service Data) application for end-users to convert stablecoins to local fiat.
 
 [**Read more at docs.kotanipay.com**](https://docs.kotanipay.com/).
